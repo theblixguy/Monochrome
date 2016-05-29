@@ -62,6 +62,16 @@ public class Utils {
 
     public static void toggleMonochrome(int value, ContentResolver contentResolver) {
         Settings.Secure.putInt(contentResolver, "accessibility_display_daltonizer_enabled", value);
+        if (value == 0) {
+            Settings.Secure.putInt(contentResolver, "accessibility_display_daltonizer", -1);
+        } else if (value == 1) {
+            Settings.Secure.putInt(contentResolver, "accessibility_display_daltonizer", 0);
+        }
+    }
+
+    public static void resetMonochrome(ContentResolver contentResolver) {
+        Settings.Secure.putInt(contentResolver, "accessibility_display_daltonizer_enabled", 0);
+        Settings.Secure.putInt(contentResolver, "accessibility_display_daltonizer", -1);
     }
 
     public static void showRootWorkaroundInstructions(final Context context) {

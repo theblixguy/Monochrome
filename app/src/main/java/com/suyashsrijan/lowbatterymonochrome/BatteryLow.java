@@ -19,7 +19,7 @@ public class BatteryLow extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "LOW battery broadcast received, disabling monochrome mode");
+        Log.i(TAG, "LOW battery broadcast received, enabling monochrome mode");
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         isSecureSettingsPermGranted = settings.getBoolean("isSecureSettingsPermGranted", false);
         isMonochromeEnabled = settings.getBoolean("isMonochromeEnabled", false);

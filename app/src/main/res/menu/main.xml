@@ -13,4 +13,10 @@
         android:orderInCategory="100"
         android:title="Donate"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reset_monochrome"
+        android:orderInCategory="100"
+        android:title="Reset"
+        app:showAsAction="never" />
 </menu>

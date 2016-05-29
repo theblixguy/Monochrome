@@ -118,6 +118,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        if (Utils.isSecureSettingsPermGranted(this)) {
+            editor = settings.edit();
+            isSecureSettingsPermGranted = true;
+            editor.putBoolean("isSecureSettingsPermGranted", true);
+            editor.apply();
+        }
     }
 
     @Override
@@ -140,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_donate_dev:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/suyashsrijan")));
+                break;
+            case R.id.action_reset_monochrome:
+                Utils.resetMonochrome(getContentResolver());
                 break;
         }
         return super.onOptionsItemSelected(item);
