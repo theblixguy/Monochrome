@@ -113,6 +113,19 @@ public class Utils {
         builder.show();
     }
 
+    public static void showMonochromeActiveDialog(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("That's it");
+        builder.setMessage("Monochrome is now enabled and will automatically activate when your battery becomes low");
+        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
+
     public static void showMoreInfoDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
         builder.setTitle("More info");

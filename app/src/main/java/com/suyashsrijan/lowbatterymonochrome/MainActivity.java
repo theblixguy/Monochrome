@@ -22,7 +22,7 @@ import com.nanotasks.Tasks;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     public static final String TAG = "LowBatteryMonochrome";
     boolean isSuAvailable = false;
@@ -46,28 +46,18 @@ public class MainActivity extends AppCompatActivity {
         toggleMonochromeSwitch = (SwitchCompat) findViewById(R.id.switch1);
         textViewStatus = (TextView) findViewById(R.id.textView2);
         isMonochromeEnabled = settings.getBoolean("isMonochromeEnabled", false);
-        toggleMonochromeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    editor = settings.edit();
-                    editor.putBoolean("isMonochromeEnabled", true);
-                    editor.apply();
-                    textViewStatus.setText("Monochrome is active");
-                } else {
-                    editor = settings.edit();
-                    editor.putBoolean("isMonochromeEnabled", false);
-                    editor.apply();
-                    textViewStatus.setText("Monochrome is inactive");
-                }
-            }
-        });
+
+        toggleMonochromeSwitch.setOnCheckedChangeListener(null);
 
         if (isMonochromeEnabled) {
+            textViewStatus.setText("Monochrome is active");
             toggleMonochromeSwitch.setChecked(true);
         } else {
+            textViewStatus.setText("Monochrome is inactive");
             toggleMonochromeSwitch.setChecked(false);
         }
+
+        toggleMonochromeSwitch.setOnCheckedChangeListener(this);
 
         if (!Utils.isSecureSettingsPermGranted(getApplicationContext())) {
             progressDialog = new MaterialDialog.Builder(this)
@@ -92,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     isSuAvailable = result;
                     Log.i(TAG, "SU available: " + Boolean.toString(result));
-                    Log.i(TAG, "WRITE_SECURE_SETTINGS granted: " + Boolean.toString(isSecureSettingsPermGranted));
                     if (isSuAvailable) {
                         Log.i(TAG, "Granting android.permission.WRITE_SECURE_SETTINGS to com.suyashsrijan.lowbatterymonochrome");
                         Utils.executeCommand("pm grant com.suyashsrijan.lowbatterymonochrome android.permission.WRITE_SECURE_SETTINGS", isSuAvailable);
@@ -125,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("isSecureSettingsPermGranted", true);
             editor.apply();
         }
+
+        Log.i(TAG, "WRITE_SECURE_SETTINGS granted: " + Boolean.toString(isSecureSettingsPermGranted));
     }
 
     @Override
@@ -153,5 +144,21 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (b) {
+            editor = settings.edit();
+            editor.putBoolean("isMonochromeEnabled", true);
+            editor.apply();
+            textViewStatus.setText("Monochrome is active");
+            Utils.showMonochromeActiveDialog(MainActivity.this);
+        } else {
+            editor = settings.edit();
+            editor.putBoolean("isMonochromeEnabled", false);
+            editor.apply();
+            textViewStatus.setText("Monochrome is inactive");
+        }
     }
 }

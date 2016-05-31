@@ -19,7 +19,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Monochrome turns on monochrome (or black &amp; white) mode when your battery is low, to reduce display power consumption"
+        android:text="Monochrome automatically turns on monochrome (or black &amp; white) mode when your battery is low, to reduce display power consumption"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#656973"
         android:textSize="18sp" />
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="version 1.0 (3)"
+        android:text="version 1.0 (4)"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#ffffff"
         android:textStyle="bold" />
