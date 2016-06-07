@@ -4,8 +4,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -22,6 +25,32 @@ public class Utils {
         if (context.checkCallingOrSelfPermission("android.permission.WRITE_SECURE_SETTINGS") == PackageManager.PERMISSION_GRANTED)
             return true;
         else return false;
+    }
+
+    public static int getLowBatteryLevel() {
+        int level = Resources.getSystem().getInteger(Resources.getSystem().getIdentifier("config_lowBatteryWarningLevel", "int", "android"));
+        return (level >= 15 ? level : 0);
+    }
+
+    public static int getBatteryLevel(Context context) {
+
+        final Intent batteryIntent = context
+                .registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        if (batteryIntent == null) {
+            return Math.round(50.0f);
+        }
+
+        final int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        final int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        if (level == -1 || scale == -1) {
+            return Math.round(50.0f);
+        }
+
+        float battery_level = ((float) level / (float) scale) * 100.0f;
+        return Math.round(battery_level);
+
     }
 
     public static void executeCommand(final String command, boolean isSuAvailable) {
@@ -94,6 +123,14 @@ public class Utils {
 
             }
         });
+        builder.show();
+    }
+
+    public static void showRootDeniedDialog(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Error");
+        builder.setMessage("SU permission denied or not available!");
+        builder.setPositiveButton("Close", null);
         builder.show();
     }
 

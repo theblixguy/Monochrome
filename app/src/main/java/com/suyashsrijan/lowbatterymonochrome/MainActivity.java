@@ -118,6 +118,44 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         Log.i(TAG, "WRITE_SECURE_SETTINGS granted: " + Boolean.toString(isSecureSettingsPermGranted));
     }
 
+    public void resetMonochrome() {
+        progressDialog = new MaterialDialog.Builder(this)
+                .title("Please wait")
+                .autoDismiss(false)
+                .cancelable(false)
+                .content("Requesting SU access...")
+                .progress(true, 0)
+                .show();
+        Log.i(TAG, "Check if SU is available, and request SU permission if it is");
+
+        Tasks.executeInBackground(MainActivity.this, new BackgroundWork<Boolean>() {
+            @Override
+            public Boolean doInBackground() throws Exception {
+                return Shell.SU.available();
+            }
+        }, new Completion<Boolean>() {
+            @Override
+            public void onSuccess(Context context, Boolean result) {
+                if (progressDialog != null) {
+                    progressDialog.cancel();
+                }
+                isSuAvailable = result;
+                Log.i(TAG, "SU available: " + Boolean.toString(result));
+                if (isSuAvailable) {
+                    Utils.resetMonochrome(getContentResolver());
+                } else {
+                    Utils.showRootDeniedDialog(MainActivity.this);
+                }
+            }
+
+            @Override
+            public void onError(Context context, Exception e) {
+                Log.e(TAG, "Error querying SU: " + e.getMessage());
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
@@ -140,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/suyashsrijan")));
                 break;
             case R.id.action_reset_monochrome:
-                Utils.resetMonochrome(getContentResolver());
+                resetMonochrome();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -148,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
         if (b) {
             editor = settings.edit();
             editor.putBoolean("isMonochromeEnabled", true);
