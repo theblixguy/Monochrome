@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.provider.Settings;
@@ -28,7 +29,12 @@ public class Utils {
     }
 
     public static int getLowBatteryLevel() {
-        int level = Resources.getSystem().getInteger(Resources.getSystem().getIdentifier("config_lowBatteryWarningLevel", "int", "android"));
+        int level;
+        try {
+            level = Resources.getSystem().getInteger(Resources.getSystem().getIdentifier("config_lowBatteryWarningLevel", "int", "android"));
+        } catch (NotFoundException e) {
+            level = 15;
+        }
         return (level >= 15 ? level : 0);
     }
 
@@ -126,10 +132,10 @@ public class Utils {
         builder.show();
     }
 
-    public static void showRootDeniedDialog(final Context context) {
+    public static void showPermNotGrantedDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
         builder.setTitle("Error");
-        builder.setMessage("SU permission denied or not available!");
+        builder.setMessage("android.permission.WRITE_SECURE_SETTINGS not granted");
         builder.setPositiveButton("Close", null);
         builder.show();
     }

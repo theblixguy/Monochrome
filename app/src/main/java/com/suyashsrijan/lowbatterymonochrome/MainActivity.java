@@ -119,41 +119,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     }
 
     public void resetMonochrome() {
-        progressDialog = new MaterialDialog.Builder(this)
-                .title("Please wait")
-                .autoDismiss(false)
-                .cancelable(false)
-                .content("Requesting SU access...")
-                .progress(true, 0)
-                .show();
-        Log.i(TAG, "Check if SU is available, and request SU permission if it is");
-
-        Tasks.executeInBackground(MainActivity.this, new BackgroundWork<Boolean>() {
-            @Override
-            public Boolean doInBackground() throws Exception {
-                return Shell.SU.available();
-            }
-        }, new Completion<Boolean>() {
-            @Override
-            public void onSuccess(Context context, Boolean result) {
-                if (progressDialog != null) {
-                    progressDialog.cancel();
-                }
-                isSuAvailable = result;
-                Log.i(TAG, "SU available: " + Boolean.toString(result));
-                if (isSuAvailable) {
-                    Utils.resetMonochrome(getContentResolver());
-                } else {
-                    Utils.showRootDeniedDialog(MainActivity.this);
-                }
-            }
-
-            @Override
-            public void onError(Context context, Exception e) {
-                Log.e(TAG, "Error querying SU: " + e.getMessage());
-                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        if (Utils.isSecureSettingsPermGranted(getApplicationContext())) {
+            Utils.resetMonochrome(getContentResolver());
+        } else {
+            Utils.showPermNotGrantedDialog(this);
+        }
     }
 
     @Override
