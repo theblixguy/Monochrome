@@ -78,6 +78,6 @@
                 android:textSize="70sp" />
                 
         </RelativeLayout>
-    </ScrollView
+    </ScrollView>
 
 </RelativeLayout>
