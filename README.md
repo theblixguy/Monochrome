@@ -5,6 +5,8 @@ Monochrome is triggered when your device's battery level hits the LOW level as d
 
 Monochrome also works on the GPU level, so Monochrome does not implement a hidden/invisible view on top of apps to enforce black and white colors. This means Monochrome does not run in the background and/or constantly monitor your battery level, it's only activated when your battery reaches LOW or OKAY states and after enabling/disabling B/W mode on the GPU level, Monochrome exits
 
+If the display remains stuck in monochrome you can use the `Reset to colour` option.
+
 # License
 
 This code is licensed under GPL v2
