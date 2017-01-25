@@ -17,6 +17,6 @@
     <item
         android:id="@+id/action_reset_monochrome"
         android:orderInCategory="100"
-        android:title="Reset"
+        android:title="Reset to colour"
         app:showAsAction="never" />
 </menu>
