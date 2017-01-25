@@ -178,7 +178,8 @@ public class Utils {
                 "when your battery level reaches the OKAY state, Monochrome is turned off. This is all done automatically so you don't have to manage anything. " +
                 "\n\nMonochrome also works on the GPU level, so Monochrome does not implement a hidden/invisible view on top of apps to enforce black and white colors. " +
                 "This means Monochrome does not run in the background and/or constantly monitor your battery level, it's only activated when your battery reaches LOW " +
-                "and OKAY states and after enabling/disabling B/W mode on the GPU level, Monochrome exits."
+                "and OKAY states and after enabling/disabling B/W mode on the GPU level, Monochrome exits.\n\nIf the display remains stuck in monochrome even after " +
+                "the battery level reached OKAY state, you can use the Reset option to get back to colour."
         );
         builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             @Override
